@@ -1,4 +1,385 @@
-.golden-img {
-    max-width: 50%;
+/* =============================================
+   Global Reset
+   ============================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* =============================================
+   Body
+   ============================================= */
+body {
+    background-color: #dce3ea;
+    color: #1f2937;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+/* =============================================
+   Site Header Banner
+   ============================================= */
+.site-header {
+    background-color: #122a45;
+    padding: 18px 24px;
+    border-bottom: 4px solid #2563eb;
+}
+
+.site-header p {
+    color: #c8d9ec;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.88rem;
+    text-align: left;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.site-name {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* =============================================
+   Navigation
+   ============================================= */
+nav {
+    background-color: #1e3a5f;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+nav ul li a {
+    display: block;
+    color: #d0e1f2;
+    text-decoration: none;
+    padding: 13px 22px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+}
+
+nav ul li a:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+nav ul li a.active {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+/* =============================================
+   Main Content Area
+   ============================================= */
+main {
+    max-width: 800px;
+    margin: 36px auto 40px;
+    background-color: #ffffff;
+    padding: 44px 52px;
+    border: 1px solid #c8d3db;
+}
+
+/* =============================================
+   Headings
+   ============================================= */
+h1 {
+    color: #122a45;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.75rem;
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+h2 {
+    color: #1e3a5f;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.25rem;
+    margin-top: 36px;
+    margin-bottom: 12px;
+    text-align: left;
+    border-bottom: 2px solid #dce3ea;
+    padding-bottom: 6px;
+}
+
+h3 {
+    color: #1e3a5f;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.05rem;
+    margin-top: 28px;
+    margin-bottom: 8px;
+}
+
+/* =============================================
+   Paragraphs
+   ============================================= */
+p {
+    text-align: left;
+    margin-bottom: 16px;
+    color: #1f2937;
+}
+
+/* =============================================
+   Lists
+   ============================================= */
+ul, ol {
+    margin: 14px 0 18px 30px;
+    text-align: left;
+}
+
+li {
+    margin-bottom: 8px;
+    color: #1f2937;
+    line-height: 1.7;
+}
+
+/* =============================================
+   Images
+   ============================================= */
+.screenshot {
+    display: block;
+    max-width: 100%;
     height: auto;
+    margin: 18px auto 6px;
+    border: 1px solid #c0cdd6;
+}
+
+.img-caption {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #5a6475;
+    font-style: italic;
+    margin-bottom: 22px;
+}
+
+.img-block {
+    margin: 20px 0;
+}
+
+/* =============================================
+   Horizontal Rule
+   ============================================= */
+hr {
+    border: none;
+    border-top: 2px solid #dce3ea;
+    margin: 36px 0;
+}
+
+/* =============================================
+   Code Blocks
+   ============================================= */
+pre {
+    background-color: #f4f6f8;
+    border: 1px solid #d1d9e0;
+    border-left: 4px solid #2563eb;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 10px 0 18px;
+    line-height: 1.5;
+    text-align: left;
+    color: #1f2937;
+    white-space: pre;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88em;
+    color: #1e3a5f;
+    background-color: #f0f4ff;
+    padding: 1px 4px;
+}
+
+/* =============================================
+   Inline Highlight Span
+   ============================================= */
+.highlight {
+    background-color: #f0f4ff;
+    color: #122a45;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88em;
+    padding: 1px 4px;
+    border: 1px solid #d0dbf0;
+}
+
+/* =============================================
+   Dataset Blocks (SQL section)
+   ============================================= */
+.dataset-block {
+    margin-bottom: 30px;
+}
+
+.dataset-block h3 {
+    background-color: #f4f6f8;
+    padding: 6px 14px;
+    border-left: 4px solid #2563eb;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 0.97rem;
+}
+
+/* =============================================
+   Intro / Info Box
+   ============================================= */
+.intro-box {
+    background-color: #f0f5ff;
+    border-left: 4px solid #2563eb;
+    padding: 18px 22px;
+    margin: 28px 0 10px;
+}
+
+.intro-box p {
+    margin-bottom: 10px;
+}
+
+.intro-box p:last-child {
+    margin-bottom: 0;
+}
+
+/* =============================================
+   Visual Mapping Table
+   ============================================= */
+.visual-mapping {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 22px;
+    font-size: 0.88rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.visual-mapping th {
+    background-color: #1e3a5f;
+    color: #ffffff;
+    padding: 9px 12px;
+    text-align: left;
+}
+
+.visual-mapping td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #d8e0e8;
+    color: #1f2937;
+    vertical-align: top;
+}
+
+.visual-mapping tr:nth-child(even) td {
+    background-color: #f4f6f8;
+}
+
+/* =============================================
+   Contact / Question Form
+   ============================================= */
+.contact-form {
+    background-color: #f8f9fb;
+    border: 1px solid #d1d9e0;
+    padding: 28px 32px;
+    margin-top: 10px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.88rem;
+    color: #122a45;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #b0bec5;
+    background-color: #ffffff;
+    font-size: 0.93rem;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #1f2937;
+}
+
+.form-group textarea {
+    height: 110px;
+    resize: vertical;
+}
+
+.btn-submit {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 11px 26px;
+    font-size: 0.93rem;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+}
+
+.btn-submit:hover {
+    background-color: #122a45;
+}
+
+/* =============================================
+   Download Link Block
+   ============================================= */
+.download-note {
+    background-color: #f4f6f8;
+    border: 1px solid #d1d9e0;
+    padding: 12px 18px;
+    margin: 18px 0 22px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.92rem;
+}
+
+.download-note a {
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.download-note a:hover {
+    color: #122a45;
+}
+
+/* =============================================
+   General Links
+   ============================================= */
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #122a45;
+    text-decoration: underline;
+}
+
+/* =============================================
+   Footer
+   ============================================= */
+footer {
+    background-color: #122a45;
+    color: #8aadc8;
+    text-align: center;
+    padding: 18px 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.82rem;
+}
+
+footer p {
+    color: #8aadc8;
+    text-align: center;
+    margin: 0;
 }

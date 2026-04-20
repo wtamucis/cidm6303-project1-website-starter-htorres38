@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works | Databricks Site</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <p>
+        <span class="site-name">Why Databricks Is Becoming a Must-Know Tool</span>
+        CIDM 6303 &mdash; Project 1
+    </p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="demo.html">Demo Walkthrough</a></li>
+        <li><a href="how-it-works.html" class="active">How It Works</a></li>
+    </ul>
+</nav>
+
+<main>
+
+    <h1>How Databricks Works for Analysts and Data Engineers</h1>
+
+    <p>
+        Understanding how Databricks is organized helps make sense of how each part of the platform fits together.
+        At the foundation is the concept of a <b>table</b>, which is a structured set of data that lives in the
+        Databricks lakehouse and can be queried using standard SQL. Tables are organized inside <i>schemas</i>,
+        which are logical groupings similar to folders. Schemas are grouped inside a <i>catalog</i>, which is the
+        top level of the hierarchy. Together, these three layers form the structure that Databricks calls
+        <b>Unity Catalog</b>, a system designed to give organizations a consistent and secure way to manage all
+        of their data in one place. When a file is uploaded and a table is created from it, that table becomes a
+        permanent, queryable object that anyone in the workspace with the right permissions can access. For the
+        demo on this site, a table named <span class="highlight">fuel_prices</span> was created inside an existing
+        schema by uploading a CSV file directly through the Databricks interface.
+    </p>
+
+    <p>
+        <b>Dashboards</b> in Databricks are built on top of <b>SQL datasets</b>. A SQL dataset is a named query,
+        essentially a saved SELECT statement, that the dashboard can reference as a data source for its charts and
+        counters. When you create a new dashboard, the first task is to define the datasets that will power it.
+        Each dataset runs against the underlying table and returns a structured result that a visual can read. This
+        separation between the query logic and the display layer is one of the things that makes Databricks dashboards
+        practical to maintain: if the data in the table changes, the dashboard visuals automatically reflect the
+        latest results the next time the datasets are refreshed. For the <i>Texas Fuel Tracker</i> dashboard shown
+        in the demo, thirteen separate SQL datasets were created, each focused on a specific question about fuel
+        prices, such as the most recent Houston price, the month-over-month change, or the spread between Houston
+        and the national average. Once all thirteen datasets were saved, building the visuals was a matter of
+        connecting each chart to the right dataset and choosing the appropriate columns for the axes and groupings.
+    </p>
+
+    <p>
+        Beyond one-off queries and dashboards, Databricks supports automated workflows through a section of the
+        platform called <b>Jobs &amp; Pipelines</b>. This is accessible directly from the left sidebar in the
+        workspace. From there, you can create an <i>ETL pipeline</i>, which is a structured workflow that reads
+        data from a source table, applies transformations, and writes the result somewhere useful. One of the
+        more practical features here is that <b>Databricks Genie</b> can help configure the pipeline for you.
+        After clicking to create an ETL pipeline, a Genie prompt appears at the bottom of the screen. You can
+        type a plain-language instruction such as <i>Set up this pipeline to read data from @fuel_prices</i>,
+        referencing the table by name, and Genie will generate the pipeline code automatically. From there, you
+        review what it produced, click <b>Allow</b> and <b>Accept</b> to apply the generated code, and the
+        pipeline is ready to run. You can also ask Genie to write aggregations or additional transformations
+        before running the pipeline. Once the pipeline exists, you can trigger it manually or attach it to a
+        <b>job</b>, which lets Databricks run the whole pipeline on a schedule without any manual intervention.
+    </p>
+
+    <div class="img-block">
+        <img
+            src="images/jobs_pipeline_home.png"
+            alt="Databricks left sidebar with Jobs and Pipelines selected, showing the pipeline creation screen"
+            title="Databricks Jobs and Pipelines Home"
+            width="800"
+            height="450"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <div class="img-block">
+        <img
+            src="images/etl_pipeline.png"
+            alt="Databricks ETL pipeline editor with Genie prompt at the bottom reading: Set up this pipeline to read data from fuel_prices"
+            title="Databricks ETL Pipeline Genie Prompt"
+            width="800"
+            height="450"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <div class="img-block">
+        <img
+            src="images/genie_output.png"
+            alt="Databricks Genie output showing generated pipeline code with Allow and Accept options"
+            title="Databricks Genie Pipeline Code Output"
+            width="800"
+            height="450"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <p>
+        The typical flow in a Databricks project follows a clear path from raw data to reporting. It starts with
+        data landing somewhere, whether that is an uploaded file, a connected database, a cloud storage bucket,
+        or an automated data feed. That raw data is stored in the lakehouse using <i>Delta format</i>, which is a
+        storage layer that adds reliability, versioning, and performance optimizations on top of standard file
+        formats. From there, SQL or Python code in a notebook or pipeline transforms the raw data into something
+        clean and useful, fixing errors, standardizing formats, and joining tables together as needed. The resulting
+        clean table becomes the source for SQL datasets, and those datasets power the dashboards that analysts and
+        business users rely on for decision-making. Jobs and pipelines keep this chain running automatically so
+        that the data stays current. The demo on this site covers only the upload-to-dashboard portion of this
+        flow, but understanding the full picture helps explain why Databricks is used at scale across many industries
+        and why the skills transfer across a wide range of real data problems.
+    </p>
+
+    <hr>
+
+    <h2>Key Concepts at a Glance</h2>
+
+    <p>
+        The following list summarizes the core Databricks concepts covered on this page. Each item represents
+        a building block that connects to the others in the platform workflow.
+    </p>
+
+    <ul>
+        <li>
+            <b>Table:</b> A structured dataset stored in the Databricks lakehouse and queryable with SQL.
+            Tables are permanent objects that persist after the session ends.
+        </li>
+        <li>
+            <b>Schema:</b> A logical grouping of related tables within a catalog. Similar to a folder or
+            database namespace that keeps tables organized.
+        </li>
+        <li>
+            <b>Unity Catalog:</b> The three-level hierarchy of catalog, schema, and table that Databricks uses
+            to organize and govern all data in a workspace.
+        </li>
+        <li>
+            <b>SQL Dataset:</b> A named, saved SQL query inside a dashboard that serves as the data source
+            for one or more chart visuals.
+        </li>
+        <li>
+            <b>Dashboard:</b> An interactive visual report built from one or more SQL datasets, containing
+            charts, counters, tables, and other visualization types.
+        </li>
+        <li>
+            <b>Job:</b> A scheduled task in Databricks that can run a notebook, SQL query, or pipeline
+            automatically on a defined interval or trigger.
+        </li>
+        <li>
+            <b>Delta Live Tables:</b> A Databricks framework for defining reliable, automated data pipelines
+            that move data from raw sources to clean, structured tables.
+        </li>
+        <li>
+            <b>Delta Format:</b> The storage layer that Databricks uses for tables, providing versioning,
+            reliability, and performance improvements over standard file formats.
+        </li>
+    </ul>
+
+    <p>
+        The <a href="demo.html">Demo Walkthrough</a> page shows several of these concepts in action using a real
+        dataset. If you want to see how a table is created, how SQL datasets are added to a dashboard, and what
+        the finished result looks like, that page walks through the entire process step by step with screenshots.
+    </p>
+
+</main>
+
+<footer>
+    <p>
+        <a href="index.html">Home</a> &nbsp;|&nbsp;
+        <a href="demo.html">Demo Walkthrough</a> &nbsp;|&nbsp;
+        <a href="how-it-works.html">How It Works</a>
+    </p>
+    <p>CIDM 6303 &mdash; Project 1 &mdash; Why Databricks Is Becoming a Must-Know Tool</p>
+</footer>
+
+</body>
+</html>

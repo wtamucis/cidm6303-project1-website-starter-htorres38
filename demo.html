@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Walkthrough | Databricks Site</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <p>
+        <span class="site-name">Why Databricks Is Becoming a Must-Know Tool</span>
+        CIDM 6303 &mdash; Project 1
+    </p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="demo.html" class="active">Demo Walkthrough</a></li>
+        <li><a href="how-it-works.html">How It Works</a></li>
+    </ul>
+</nav>
+
+<main>
+
+    <h1>A Simple Databricks Walkthrough</h1>
+
+    <p>
+        This page walks through a complete but simple example of using Databricks to work with data from start to
+        finish. The goal is to show that getting from a raw <i>CSV file</i> to a working interactive dashboard in
+        Databricks does not require a programming background or years of database experience. By following these
+        nine steps, someone new to the platform can understand how data gets loaded into the system, how a table is
+        created and stored in the catalog, how SQL queries become reusable datasets, and how those datasets drive the
+        visuals in a Databricks dashboard. Everything shown here uses <b>real screenshots</b> taken during an actual
+        demo project built specifically for this site.
+    </p>
+
+    <p>
+        The starting point for this demo is a CSV file called <span class="highlight">DemoData.csv</span>, which
+        contains monthly fuel pricing data for the city of <b>Houston, Texas</b>. Each row in the file includes a
+        date, the gasoline price for Houston, the Texas statewide average, and the national average. This kind of
+        structured, consistent dataset works well in Databricks because it has a clear time dimension and naturally
+        supports trend analysis and regional comparisons. The file is small enough to upload directly through the
+        Databricks interface, which is one of the features this walkthrough demonstrates. A download link is provided
+        below if you want to follow along using the same data.
+    </p>
+
+    <p>
+        The finished result of this walkthrough is a dashboard called the <b>Texas Fuel Tracker</b>. The dashboard
+        includes thirteen different visuals: seven counter tiles showing the most recent prices and spreads,
+        four line charts tracking trends over time, one heat map showing price by month and year, and one bar chart
+        comparing annual averages across Houston, Texas, and the national level. Building this kind of dashboard in
+        Databricks starts with writing the SQL queries that define each dataset, then connecting those datasets to
+        chart types inside the dashboard editor. The steps below walk through each part of that process in plain
+        language, with screenshots to show what each stage looks like in practice.
+    </p>
+
+    <div class="download-note">
+        <b>Download the demo data:</b>
+        <a href="inputs/DemoData.csv">DemoData.csv</a>
+        &mdash; This is the CSV file used as the starting point for this entire walkthrough.
+        <i>Data source: DemoData.csv provided with this site.</i>
+    </div>
+
+    <hr>
+
+    <h2>Walkthrough Overview</h2>
+
+    <p>
+        The following list summarizes all nine steps in order. Detailed explanations and screenshots for each step
+        appear in the section below.
+    </p>
+
+    <ol>
+        <li>Download <span class="highlight">DemoData.csv</span> from the inputs folder using the link above.</li>
+        <li>In Databricks, use the left sidebar to navigate to the <b>Add or Upload Data</b> option.</li>
+        <li>Choose <b>Create or Modify Table</b>, browse for the CSV file, select a schema, and name the table
+            <span class="highlight">fuel_prices</span>.</li>
+        <li>Go to <b>Catalog</b>, open the schema, click the <span class="highlight">fuel_prices</span> table,
+            and review the sample data preview.</li>
+        <li>In the sample data area, review the AI-suggested questions that Databricks generates automatically
+            and optionally run any of them to see the generated SQL.</li>
+        <li>Navigate to <b>Dashboards</b> in the left sidebar and create a new dashboard.</li>
+        <li>Inside the dashboard editor, open <b>Data</b> and add each SQL query as its own named SQL dataset.</li>
+        <li>For each visual, use the right sidebar to choose a chart type, connect the correct dataset, and assign
+            the appropriate columns to axes and color groupings.</li>
+        <li>Name the finished dashboard <b>Texas Fuel Tracker</b> and review the final result.</li>
+    </ol>
+
+    <hr>
+
+    <h2>Detailed Walkthrough</h2>
+
+    <h3>Step 1: Download the Demo Data</h3>
+
+    <p>
+        Before doing anything in Databricks, download the file <span class="highlight">DemoData.csv</span> using
+        the link in the download box above. This file is the foundation of the entire demo and contains the fuel
+        pricing data that will be uploaded, stored as a table, and queried throughout the rest of the walkthrough.
+        The file is a flat CSV with column headers in the first row, making it straightforward for Databricks to
+        read and parse automatically when it is uploaded. Save it somewhere easy to find on your computer since
+        you will need to browse to it in the next step.
+    </p>
+
+    <h3>Step 2: Navigate to Data Upload in Databricks</h3>
+
+    <p>
+        Once you are logged into your Databricks workspace, look at the left sidebar. Find and click the option
+        labeled <b>Add or Upload Data</b>. The exact label and icon may vary slightly depending on your workspace
+        configuration, but it is typically near the bottom of the sidebar menu or accessible from a plus icon.
+        Clicking it will open a new screen where Databricks presents different options for how to bring data into
+        the platform. This is the entry point for manually uploading a file, which is the method used in this demo.
+    </p>
+
+    <div class="img-block">
+        <img
+            src="images/add_upload.png"
+            alt="Databricks left sidebar showing the Add or Upload Data navigation option"
+            title="Databricks Add or Upload Data"
+            width="720"
+            height="430"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <h3>Step 3: Create the fuel_prices Table</h3>
+
+    <p>
+        On the upload data screen, select the option to <b>Create or Modify Table</b>. This will open a dialog
+        where you can browse your computer for the file you want to upload. Click the browse button, navigate to
+        where you saved <span class="highlight">DemoData.csv</span>, and select it. Databricks will read the file
+        and display a preview of the columns and a sample of the rows. From there, choose the schema where the
+        table should be stored, and set the table name to <span class="highlight">fuel_prices</span>. Once the
+        settings look correct, click the button to create the table. Databricks will upload the file and register
+        it as a permanent table in the catalog.
+    </p>
+
+    <div class="img-block">
+        <img
+            src="images/create_modify.png"
+            alt="Databricks screen showing the Create or Modify Table option"
+            title="Databricks Create or Modify Table"
+            width="720"
+            height="430"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <div class="img-block">
+        <img
+            src="images/browse_files.png"
+            alt="Databricks file browser dialog for selecting the CSV file to upload"
+            title="Databricks Browse Files Dialog"
+            width="720"
+            height="430"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <div class="img-block">
+        <img
+            src="images/schema.png"
+            alt="Databricks schema and table name configuration screen during table creation"
+            title="Databricks Schema Selection"
+            width="720"
+            height="430"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <h3>Step 4: Review the Table in Catalog</h3>
+
+    <p>
+        After the table is created, go to <b>Catalog</b> in the left sidebar. Find the schema you selected during
+        the upload step, open it, and click on the <span class="highlight">fuel_prices</span> table. Databricks will
+        display the table schema, showing each column name and its data type, along with a <i>sample data</i> preview
+        that shows the first several rows of the table. This is a good place to confirm that the data was loaded
+        correctly, that the column names match what you expected, and that the date and numeric columns were parsed
+        with the right data types. If anything looks off, you can drop the table and re-upload with adjusted settings.
+    </p>
+
+    <div class="img-block">
+        <img
+            src="images/catalog.png"
+            alt="Databricks Catalog view showing the fuel_prices table schema and sample data"
+            title="Databricks Catalog with fuel_prices Table"
+            width="800"
+            height="450"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <h3>Step 5: Explore AI-Suggested Questions</h3>
+
+    <p>
+        While viewing the table in the Catalog, Databricks may display a section with <b>suggested questions</b>
+        powered by its AI assistant, sometimes called <i>Databricks Genie</i>. These are auto-generated prompts
+        based on the structure of your table, such as questions about averages, recent values, or comparisons
+        between columns. Clicking on any of these questions will generate a SQL query automatically and run it
+        against the table. This feature is not required for building the dashboard, but it is a useful demonstration
+        of how Databricks tries to make data exploration more accessible. For the <span class="highlight">fuel_prices</span>
+        table, example suggestions might include questions about the most recent price, the highest price on record,
+        or how Houston compares to the national average.
+    </p>
+
+    <div class="img-block">
+        <img
+            src="images/genie.png"
+            alt="Databricks Genie interface showing AI-suggested questions for the fuel_prices table"
+            title="Databricks Genie Suggested Questions"
+            width="800"
+            height="450"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <h3>Step 6: Create a New Dashboard</h3>
+
+    <p>
+        To start building the dashboard, navigate to <b>Dashboards</b> in the left sidebar. This section lists any
+        existing dashboards in your workspace and provides a button to create a new one. Click to create a new
+        dashboard and Databricks will open an empty dashboard editor. The editor has a canvas in the center where
+        visuals will be placed and a right sidebar for configuration. Before adding any charts, the first task is
+        to define the data sources, which are added as SQL datasets in the next step.
+    </p>
+
+    <div class="img-block">
+        <img
+            src="images/dashboards.png"
+            alt="Databricks Dashboards listing screen with option to create a new dashboard"
+            title="Databricks Dashboards Screen"
+            width="800"
+            height="450"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <h3>Step 7: Add SQL Datasets</h3>
+
+    <p>
+        Inside the dashboard editor, find the <b>Data</b> section, typically in the right panel or through a menu
+        option at the top. This is where SQL datasets are defined. Each dataset is a named SQL query that the
+        dashboard stores and can reuse across multiple visuals. For this demo, you will add thirteen SQL datasets,
+        one for each query listed in the SQL Datasets section below. Give each dataset the name shown in the dataset
+        headers, then paste in the corresponding SQL. Databricks will run the query and confirm that it returns
+        data before saving it. Keeping each dataset focused on a single question makes it easier to manage and
+        connect to the right visual later on.
+    </p>
+
+    <div class="img-block">
+        <img
+            src="images/datasets.png"
+            alt="Databricks dashboard editor showing the SQL datasets panel"
+            title="Databricks Dashboard SQL Datasets Panel"
+            width="800"
+            height="450"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <h3>Step 8: Configure Visualizations</h3>
+
+    <p>
+        Once the SQL datasets are saved, you can start adding visuals to the dashboard canvas. Click to add a new
+        visualization, then use the <b>right sidebar</b> to configure it. The sidebar lets you choose the chart
+        type, such as counter, line chart, bar chart, or heat map, and then connect it to the appropriate dataset.
+        After selecting a dataset, you will assign columns to the axes and groupings. For example, a line chart
+        might use <span class="highlight">date</span> on the x-axis, <span class="highlight">price</span> on the
+        y-axis, and <span class="highlight">series</span> as the color grouping. The visual mapping table below
+        this walkthrough shows the full configuration for all thirteen visuals in the Texas Fuel Tracker dashboard.
+        The screenshot below shows an example of a completed chart configuration in the dashboard editor sidebar.
+    </p>
+
+    <div class="img-block">
+        <img
+            src="images/graph_example.png"
+            alt="Databricks dashboard editor showing a configured line chart with dataset and axis settings"
+            title="Databricks Dashboard Graph Configuration Example"
+            width="800"
+            height="450"
+            class="screenshot">
+        <p class="img-caption">Image source: personal Databricks screenshot by site author.</p>
+    </div>
+
+    <h3>Step 9: Name and Review the Dashboard</h3>
+
+    <p>
+        After all thirteen visuals are added and configured, click on the dashboard title at the top of the editor
+        and rename it to <b>Texas Fuel Tracker</b>. At this point, the dashboard is complete. You can publish it to
+        share it with others in the workspace, or simply use it for your own analysis. The finished dashboard gives
+        a clear picture of fuel price trends in Houston over time, how Houston prices compare to Texas and national
+        averages, and how prices have changed from month to month and year to year. This entire result was built
+        from a single uploaded CSV file and a set of SQL queries, without any external tools or programming beyond
+        standard SQL.
+    </p>
+
+    <div class="download-note">
+        <b>See the finished result:</b>
+        <a href="inputs/Final_Visuals.pdf">Final_Visuals.pdf</a>
+        &mdash; <i>This PDF shows what the completed Texas Fuel Tracker dashboard looks like, including all thirteen
+        visuals. Open it as a reference to see what you are working toward before building your own.</i>
+    </div>
+
+    <hr>
+
+    <h2>SQL Datasets Used in This Dashboard</h2>
+
+    <p>
+        Each block below is a separate SQL dataset. In the Databricks dashboard editor, each one should be added
+        individually using the name shown in the heading. Paste the SQL into the dataset editor, verify that it
+        returns data, and save it before moving on to the next one. All datasets query the
+        <span class="highlight">fuel_prices</span> table created in Step 3.
+    </p>
+
+    <div class="dataset-block">
+        <h3>Dataset 1: houston price</h3>
+<pre>SELECT date, gasoline_price
+FROM fuel_prices
+WHERE city = 'Houston'
+ORDER BY date DESC
+LIMIT 1;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 2: tx price</h3>
+<pre>SELECT date, texas_avg
+FROM fuel_prices
+WHERE city = 'Houston'
+ORDER BY date DESC
+LIMIT 1;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 3: national price</h3>
+<pre>SELECT date, national_avg
+FROM fuel_prices
+WHERE city = 'Houston'
+ORDER BY date DESC
+LIMIT 1;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 4: houston spread tx</h3>
+<pre>SELECT date, gasoline_price - texas_avg AS spread
+FROM fuel_prices
+ORDER BY date DESC
+LIMIT 1;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 5: houston spread us</h3>
+<pre>SELECT date, gasoline_price - national_avg AS spread
+FROM fuel_prices
+ORDER BY date DESC
+LIMIT 1;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 6: mom</h3>
+<pre>WITH m AS (
+  SELECT
+    date,
+    (gasoline_price - LAG(gasoline_price, 1) OVER (ORDER BY date))
+      / NULLIF(LAG(gasoline_price, 1) OVER (ORDER BY date), 0) AS mom_pct
+  FROM fuel_prices
+)
+SELECT date, mom_pct
+FROM m
+WHERE mom_pct IS NOT NULL
+ORDER BY date DESC
+LIMIT 1;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 7: yoy</h3>
+<pre>WITH y AS (
+  SELECT
+    date,
+    (gasoline_price - LAG(gasoline_price, 12) OVER (ORDER BY date))
+      / NULLIF(LAG(gasoline_price, 12) OVER (ORDER BY date), 0) AS yoy_pct
+  FROM fuel_prices
+)
+SELECT date, yoy_pct
+FROM y
+WHERE yoy_pct IS NOT NULL
+ORDER BY date DESC
+LIMIT 1;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 8: unpivot</h3>
+<pre>SELECT
+  date,
+  'Houston' AS series,
+  gasoline_price AS price
+FROM fuel_prices
+UNION ALL
+SELECT date, 'Texas Statewide' AS series, texas_avg AS price FROM fuel_prices
+UNION ALL
+SELECT date, 'U.S. National' AS series, national_avg AS price FROM fuel_prices;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 9: metrics</h3>
+<pre>WITH base AS (
+  SELECT
+    date,
+    city,
+    gasoline_price,
+    texas_avg,
+    national_avg,
+    (gasoline_price - texas_avg)   AS spread_vs_tx,
+    (gasoline_price - national_avg) AS spread_vs_us,
+    YEAR(date)  AS yr,
+    MONTH(date) AS mo
+  FROM fuel_prices
+),
+lagged AS (
+  SELECT
+    *,
+    LAG(gasoline_price, 1)  OVER (ORDER BY date) AS prev_m,
+    LAG(gasoline_price, 12) OVER (ORDER BY date) AS prev_y,
+    AVG(gasoline_price) OVER (ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS roll_3m_avg,
+    STDDEV_SAMP(gasoline_price) OVER (ORDER BY date ROWS BETWEEN 5 PRECEDING AND CURRENT ROW) AS roll_6m_vol
+  FROM base
+)
+SELECT
+  *,
+  CASE WHEN prev_m IS NULL OR prev_m = 0 THEN NULL
+       ELSE (gasoline_price - prev_m) / prev_m END AS mom_pct,
+  CASE WHEN prev_y IS NULL OR prev_y = 0 THEN NULL
+       ELSE (gasoline_price - prev_y) / prev_y END AS yoy_pct
+FROM lagged
+ORDER BY date;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 10: houston heat map</h3>
+<pre>SELECT
+  YEAR(date)              AS year,
+  MONTH(date)             AS month_num,
+  DATE_FORMAT(date, 'MMM') AS month_lbl,
+  AVG(gasoline_price)     AS avg_price
+FROM fuel_prices
+GROUP BY 1, 2, 3
+ORDER BY 1, 2;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 11: yearly avgs</h3>
+<pre>WITH yrs AS (
+  SELECT
+    YEAR(date)          AS year,
+    AVG(gasoline_price) AS houston_avg,
+    AVG(texas_avg)      AS texas_avg,
+    AVG(national_avg)   AS us_avg
+  FROM fuel_prices
+  GROUP BY YEAR(date)
+)
+SELECT year, 'Houston'          AS series, houston_avg AS avg_price FROM yrs
+UNION ALL
+SELECT year, 'Texas Statewide', texas_avg   FROM yrs
+UNION ALL
+SELECT year, 'U.S. National',   us_avg      FROM yrs
+ORDER BY year, series;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 12: mom-yoy change</h3>
+<pre>WITH calc AS (
+  SELECT
+    date,
+    gasoline_price,
+    LAG(gasoline_price, 1)  OVER (ORDER BY date) AS prev_m,
+    LAG(gasoline_price, 12) OVER (ORDER BY date) AS prev_y,
+    CASE
+      WHEN LAG(gasoline_price, 1) OVER (ORDER BY date) IS NULL THEN NULL
+      ELSE (gasoline_price - LAG(gasoline_price, 1) OVER (ORDER BY date))
+    END AS mom_abs,
+    CASE
+      WHEN LAG(gasoline_price, 1) OVER (ORDER BY date) IS NULL
+           OR LAG(gasoline_price, 1) OVER (ORDER BY date) = 0 THEN NULL
+      ELSE (gasoline_price - LAG(gasoline_price, 1) OVER (ORDER BY date))
+           / LAG(gasoline_price, 1) OVER (ORDER BY date)
+    END AS mom_pct,
+    CASE
+      WHEN LAG(gasoline_price, 12) OVER (ORDER BY date) IS NULL
+           OR LAG(gasoline_price, 12) OVER (ORDER BY date) = 0 THEN NULL
+      ELSE (gasoline_price - LAG(gasoline_price, 12) OVER (ORDER BY date))
+           / LAG(gasoline_price, 12) OVER (ORDER BY date)
+    END AS yoy_pct
+  FROM fuel_prices
+  WHERE city = 'Houston'
+)
+SELECT date, 'MoM %' AS metric, mom_pct AS pct
+FROM calc
+WHERE mom_pct IS NOT NULL
+UNION ALL
+SELECT date, 'YoY %' AS metric, yoy_pct AS pct
+FROM calc
+WHERE yoy_pct IS NOT NULL
+ORDER BY date, metric;</pre>
+    </div>
+
+    <div class="dataset-block">
+        <h3>Dataset 13: full</h3>
+<pre>SELECT * FROM fuel_prices;</pre>
+    </div>
+
+    <hr>
+
+    <h2>Dashboard Visual Reference</h2>
+
+    <p>
+        The table below shows how each visual in the Texas Fuel Tracker dashboard is configured, including which
+        dataset powers it and what values are assigned to each axis or grouping. Use this as a reference when
+        adding and setting up each chart in the dashboard editor.
+    </p>
+
+    <table class="visual-mapping">
+        <tr>
+            <th>Visual</th>
+            <th>Chart Type</th>
+            <th>Dataset</th>
+            <th>Configuration</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Counter</td>
+            <td>houston price</td>
+            <td>Value: <code>gasoline_price</code></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Counter</td>
+            <td>tx price</td>
+            <td>Value: <code>texas_avg</code></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Counter</td>
+            <td>national price</td>
+            <td>Value: <code>national_avg</code></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Counter</td>
+            <td>houston spread tx</td>
+            <td>Value: <code>spread</code></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Counter</td>
+            <td>houston spread us</td>
+            <td>Value: <code>spread</code></td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Counter</td>
+            <td>mom</td>
+            <td>Value: <code>mom_pct</code></td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>Counter</td>
+            <td>yoy</td>
+            <td>Value: <code>yoy_pct</code></td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>Line Chart</td>
+            <td>unpivot</td>
+            <td>X: monthly(<code>date</code>) &mdash; Y: <code>price</code> &mdash; Color: <code>series</code></td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>Line Chart</td>
+            <td>metrics</td>
+            <td>X: monthly(<code>date</code>) &mdash; Y1: <code>spread_vs_tx</code> &mdash; Y2: <code>spread_vs_us</code></td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>Heat Map</td>
+            <td>houston heat map</td>
+            <td>X: <code>month_lbl</code> &mdash; Y: <code>year</code> &mdash; Color: <code>avg_price</code></td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>Bar Chart</td>
+            <td>yearly avgs</td>
+            <td>X: <code>year</code> &mdash; Y: <code>avg_price</code> &mdash; Color: <code>series</code> &mdash; Labels: on</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>Line Chart</td>
+            <td>mom-yoy change</td>
+            <td>X: monthly(<code>date</code>) &mdash; Y: <code>pct</code> &mdash; Color: <code>metric</code></td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>Table</td>
+            <td>full</td>
+            <td>Columns: all</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <h2>Have a Question About This Demo?</h2>
+
+    <p>
+        If something in this walkthrough was unclear, or if you have questions about how to adapt these steps to
+        your own data, use the form below to send a question. Include as much detail as you can in the message field
+        so the response can be as specific as possible.
+    </p>
+
+    <div class="contact-form">
+        <form action="https://www.w3schools.com/action_page.php" method="post">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address">
+            </div>
+            <div class="form-group">
+                <label for="message">Your Question or Comment</label>
+                <textarea id="message" name="message" placeholder="Type your question about the demo walkthrough here..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Send My Question</button>
+        </form>
+    </div>
+
+</main>
+
+<footer>
+    <p>
+        <a href="index.html">Home</a> &nbsp;|&nbsp;
+        <a href="demo.html">Demo Walkthrough</a> &nbsp;|&nbsp;
+        <a href="how-it-works.html">How It Works</a>
+    </p>
+    <p>CIDM 6303 &mdash; Project 1 &mdash; Why Databricks Is Becoming a Must-Know Tool</p>
+</footer>
+
+</body>
+</html>
